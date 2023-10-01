@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Account;
 use Illuminate\Http\Request;
 
 class AccountsController extends Controller
@@ -12,54 +13,29 @@ class AccountsController extends Controller
      */
     public function index()
     {
-        //
+        $account = Account::latest()->first();
+        return view('dashboard.account.index',[
+            'account' =>$account,
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function updateData(Request $request)
     {
-        //
+        $request->validate([
+            'email' => 'required',
+            'phone' => 'required',
+            'fax' => 'required',
+
+        ]);
+
+        $privacy = Account::first();
+        $privacy->update([
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'fax' => $request->fax,
+        ]);
+
+        return redirect()->route('account.index')->with('msg', 'Account Updated Successfully')->with('type', 'success');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

@@ -12,7 +12,7 @@ class ContactRequestController extends Controller
      */
     public function index()
     {
-        //
+        return view('dashboard.requests.index');
     }
 
     /**

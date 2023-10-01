@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Package;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PackagesController extends Controller
 {
     public function index()
     {
         $packages = Package::orderByDesc('id')->paginate(4);
-        return view('dashboard.services.index',compact('packages'));
+        return view('dashboard.packages.index',compact('packages'));
     }
 
     /**
@@ -19,9 +20,9 @@ class PackagesController extends Controller
      */
     public function create()
     {
-        $service = new Service();
-        return view('dashboard.services.create',[
-            'service' =>$service,
+        $package = new Package();
+        return view('dashboard.packages.create',[
+            'package' =>$package,
         ]);
     }
 
@@ -33,20 +34,22 @@ class PackagesController extends Controller
         $request->validate([
             'title' =>'required',
             'description' =>'required',
+            'price' =>'required',
             'image' =>'required',
         ]);
 
         $img_name = rand() . time() . $request->file('image')->getClientOriginalExtension();
-        $request->file('image')->move(public_path('uploads/services'), $img_name);
+        $request->file('image')->move(public_path('uploads/packages'), $img_name);
 
 
-        Service::create([
+        Package::create([
             'title' =>$request->title,
             'description' =>$request->description,
+            'price' =>$request->price,
             'image' =>$img_name,
         ]);
 
-        return redirect()->route('services.index')->with('msg','Service Created Successfully');
+        return redirect()->route('packages.index')->with('msg','Package Created Successfully');
 
     }
 
@@ -65,9 +68,9 @@ class PackagesController extends Controller
 
     public function edit($id)
     {
-        $service = Service::findOrFail($id);
-        return view('dashboard.services.edit',[
-            'service' => $service,
+        $package = Package::findOrFail($id);
+        return view('dashboard.packages.edit',[
+            'package' => $package,
         ]);
     }
 
@@ -77,45 +80,46 @@ class PackagesController extends Controller
         $request->validate([
             'title' => 'nullable|string',
             'description' => 'nullable|string',
+            'price' => 'nullable',
             'image' => 'nullable',
         ]);
 
-        $service = Service::findOrFail($id);
+        $package = Package::findOrFail($id);
 
         if ($request->hasFile('image')) {
             $img_name = rand() . time() . '.' . $request->file('image')->getClientOriginalExtension();
-            $request->file('image')->move(public_path('uploads/sections'), $img_name);
+            $request->file('image')->move(public_path('uploads/packages'), $img_name);
 
-            if (file_exists(public_path('uploads/services/' . $service->image))) {
-                unlink(public_path('uploads/services/' . $service->image));
+            if (file_exists(public_path('uploads/packages/' . $package->image))) {
+                unlink(public_path('uploads/packages/' . $package->image));
             }
 
-            $service->image = $img_name;
+            $package->image = $img_name;
         }
 
-        $service->title = $request->title;
-        $service->description = $request->description;
+        $package->title = $request->title;
+        $package->description = $request->description;
 
 
 
         // Save
-        $service->save();
+        $package->save();
 
-        return redirect()->route('services.index')->with('msg', 'Services Updated Successfully');
+        return redirect()->route('packages.index')->with('msg', 'Package Updated Successfully');
     }
 
 
     public function destroy($id)
     {
-        $service = Service::findOrFail($id);
+        $package = Package::findOrFail($id);
 
         // Check if the image file exists and delete it
-        if (Storage::exists('uploads/services/' . $service->image)) {
-            Storage::delete('uploads/services/' . $service->image);
+        if (Storage::exists('uploads/packages/' . $package->image)) {
+            Storage::delete('uploads/packages/' . $package->image);
         }
 
-        $service->delete();
+        $package->delete();
 
-        return redirect()->route('services.index')->with('msg', 'Service Deleted Successfully');
+        return redirect()->route('packages.index')->with('msg', 'Package Deleted Successfully');
     }
 }

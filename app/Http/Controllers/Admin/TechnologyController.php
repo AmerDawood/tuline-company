@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Technology;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TechnologyController extends Controller
 {
@@ -12,7 +14,8 @@ class TechnologyController extends Controller
      */
     public function index()
     {
-        //
+        $technologys = Technology::orderByDesc('id')->paginate(4);
+        return view('dashboard.technologys.index',compact('technologys'));
     }
 
     /**
@@ -20,7 +23,10 @@ class TechnologyController extends Controller
      */
     public function create()
     {
-        //
+        $technology = new Technology();
+        return view('dashboard.technologys.create',[
+            'technology' =>$technology,
+        ]);
     }
 
     /**
@@ -28,7 +34,22 @@ class TechnologyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' =>'required',
+            'image' =>'required',
+        ]);
+
+        $img_name = rand() . time() . $request->file('image')->getClientOriginalExtension();
+        $request->file('image')->move(public_path('uploads/technologes'), $img_name);
+
+
+        Technology::create([
+            'title' =>$request->title,
+            'image' =>$img_name,
+        ]);
+
+        return redirect()->route('technologys.index')->with('msg','Technology Created Successfully');
+
     }
 
     /**
@@ -42,24 +63,60 @@ class TechnologyController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+
+
+    public function edit($id)
     {
-        //
+        $technology = Technology::findOrFail($id);
+        return view('dashboard.technologys.edit',[
+            'technology' => $technology,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'title' => 'nullable|string',
+            'image' => 'nullable',
+        ]);
+
+        $technology = Technology::findOrFail($id);
+
+        if ($request->hasFile('image')) {
+            $img_name = rand() . time() . '.' . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move(public_path('uploads/sections'), $img_name);
+
+            if (file_exists(public_path('uploads/technologes/' . $technology->image))) {
+                unlink(public_path('uploads/technologes/' . $technology->image));
+            }
+
+            $technology->image = $img_name;
+        }
+
+        $technology->title = $request->title;
+
+
+        // Save
+        $technology->save();
+
+        return redirect()->route('technologys.index')->with('msg', 'Technology Updated Successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+
+
+
+    public function destroy($id)
     {
-        //
+        $technology = Technology::findOrFail($id);
+
+        // Check if the image file exists and delete it
+        if (Storage::exists('uploads/technologes/' . $technology->image)) {
+            Storage::delete('uploads/technologes/' . $technology->image);
+        }
+
+        $technology->delete();
+
+        return redirect()->route('technologys.index')->with('msg', 'Technology Deleted Successfully');
     }
 }

@@ -65,11 +65,11 @@
     <div class="collapse menu-dropdown" id="sidebarCards">
         <ul class="nav nav-sm flex-column">
             <li class="nav-item">
-                <a href="" class="nav-link" data-key="t-one-page"> All Packages </a>
+                <a href="{{ route('packages.index') }}" class="nav-link" data-key="t-one-page"> All Packages </a>
             </li>
 
             <li class="nav-item">
-                <a href="" class="nav-link" data-key="t-nft-landing">Add Package </a>
+                <a href="{{ route('packages.create') }}" class="nav-link" data-key="t-nft-landing">Add Package </a>
             </li>
 
         </ul>
@@ -83,11 +83,11 @@
     <div class="collapse menu-dropdown" id="sidebartechnology">
         <ul class="nav nav-sm flex-column">
             <li class="nav-item">
-                <a href="" class="nav-link" data-key="t-one-page"> All Technology </a>
+                <a href="{{ route('technologys.index') }}" class="nav-link" data-key="t-one-page"> All Technology </a>
             </li>
 
             <li class="nav-item">
-                <a href="" class="nav-link" data-key="t-nft-landing">Add Technology </a>
+                <a href="{{ route('technologys.create') }}" class="nav-link" data-key="t-nft-landing">Add Technology </a>
             </li>
 
         </ul>
@@ -101,11 +101,11 @@
     <div class="collapse menu-dropdown" id="sidebarProjects">
         <ul class="nav nav-sm flex-column">
             <li class="nav-item">
-                <a href="" class="nav-link" data-key="t-one-page"> All Project </a>
+                <a href="{{ route('projects.index') }}" class="nav-link" data-key="t-one-page"> All Project </a>
             </li>
 
             <li class="nav-item">
-                <a href="" class="nav-link" data-key="t-nft-landing">Add Project </a>
+                <a href="{{ route('projects.create') }}" class="nav-link" data-key="t-nft-landing">Add Project </a>
             </li>
 
         </ul>
@@ -119,7 +119,7 @@
     <div class="collapse menu-dropdown" id="sidebarAccount">
         <ul class="nav nav-sm flex-column">
             <li class="nav-item">
-                <a href="" class="nav-link" data-key="t-one-page"> All accounts </a>
+                <a href="{{ route('account.index') }}" class="nav-link" data-key="t-one-page"> All accounts </a>
             </li>
 
         </ul>
@@ -133,7 +133,7 @@
     <div class="collapse menu-dropdown" id="sidebarContacts">
         <ul class="nav nav-sm flex-column">
             <li class="nav-item">
-                <a href="" class="nav-link" data-key="t-one-page"> All Contacts Request </a>
+                <a href="{{ route('requests.index') }}" class="nav-link" data-key="t-one-page"> All Contacts Request </a>
             </li>
 
         </ul>
@@ -150,22 +150,24 @@
     Service  (title , description ,  icon)    =====>   done
 
 
-    
-
-    Packages  (name , price , amenities (Like description) ,image , aminity)
 
 
+    Packages  (name , price , amenities (Like description) ,image , aminity)  =====>   done
 
 
-    technology (Laravel , React , Node js , Flutter )
+
+
+    technology (Laravel , React , Node js , Flutter ) =====>   done
+
+
     Projects (Name , title , technology , link )
 
 
 
-    Contact (Name , email , phone , how you get my company ,)
+    Contact (Name , email , phone , how you get my company ,)  =====>   done
 
 
 
-    Social (phone , Fax , email)
+    Social (phone , Fax , email) =====>   done
 
     --}}
